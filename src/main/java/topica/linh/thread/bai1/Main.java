@@ -61,16 +61,19 @@ public class Main { // main class
 	 *
 	 */
 	static class LampRemover implements Runnable { // lamp remove
+
+		private int index = 0;
+
 		@Override
 		public void run() { // thread entry point
 			while(removeRunning) { // when running
 				try {
 					System.out.println("Remove check"); // info remove
 					synchronized(store) { // lock store to thread safe
-						for(int i = 0; i < store.size(); ++i) {  // for all of store
-							Lamp l = store.getLampAtIndex(i); // get lam at index i
+						for(; index < store.size(); ++index) {  // for all of store
+							Lamp l = store.getLampAtIndex(index); // get lam at index i
 							if(l.getStatus() == Lamp.Status.off) { // check if off status or repair
-								store.removeLampAtIndex(i--); // remove from store and decrement i to get next lamp
+								store.removeLampAtIndex(index--); // remove from store and decrement i to get next lamp
 								trash.addALamp(l); // add to trash
 								System.out.println("Remove lamp index="+l.getIndex()); // info of remove lamp
 							}
